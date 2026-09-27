@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Tayra Labs · Playground</title>
+  <meta name="description" content="Tayra Labs’ private video-understanding playground, powered by Allen AI’s Molmo2-8B.">
+  <link rel="icon" type="image/svg+xml" href="/tayra-logo.svg">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#playground" aria-label="Tayra Labs home"><img class="brand-logo" src="/tayra-logo.svg" alt="" width="48" height="36"><span class="brand-wordmark">Tayra<span>Labs</span></span><span class="beta">LOCAL</span></a>
+    <div class="workspace-label">DEVELOPMENT WORKSPACE</div>
+    <nav aria-label="Workspace">
+      <a class="nav-item active" href="#playground"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7z"/></svg>Playground<span class="nav-dot"></span></a>
+      <button class="nav-item" id="history-nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7v5h5M4.7 8a8 8 0 1 1-.4 7M12 8v5l3 2"/></svg>Recent tests</button>
+      <button class="nav-item" id="guide-open"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5zM14 4v5h5M8 13h8M8 16h5"/></svg>Quick guide</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="private-badge"><span class="small-dot"></span>Private environment</div>
+      <p>Google Cloud<br><span>video-api-dev-509820</span></p>
+      <div class="profile"><div class="avatar">D</div><div>Developer workspace<small>Local testing only</small></div></div>
+    </div>
+  </aside>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="mobile-brand" href="#playground" aria-label="Tayra Labs home"><img src="/tayra-logo.svg" alt="" width="39" height="26"><span>Tayra Labs</span></a>
+      <div class="breadcrumb">Workspace <span>/</span> <strong>Playground</strong></div>
+      <div class="topbar-right"><span class="connection-dot" id="connection-dot"></span><span id="connection-label">Connecting to API</span><button id="reconnect" class="icon-button" aria-label="Refresh API connection" title="Refresh API connection"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 12 0l2 5M4 12l2 5a7 7 0 0 0 12 0"/></svg></button></div>
+    </header>
+    <main id="playground">
+      <section class="page-heading"><div><div class="eyebrow"><span></span>TAYRA LABS / PLAYGROUND</div><h1>A closer look at your video.</h1><p>Upload a clip, ask a question, and explore what’s in view.</p></div><div class="model-pill" aria-label="Underlying model: Molmo2-8B by Allen Institute for AI"><span class="model-symbol">m</span><div>Molmo2-8B<small>Allen Institute for AI</small></div><span class="pill-check">✓</span></div></section>
+
+      <div class="notice" id="service-notice" role="status"><span class="notice-symbol" id="notice-symbol">◷</span><div><strong id="notice-title">Connecting to your private API</strong><p id="notice-description">Credentials stay on this computer, outside the browser.</p></div><button class="text-button" id="saved-test">View previous test <span aria-hidden="true">↗</span></button></div>
+      <div class="error-banner" id="error-banner" role="alert" hidden></div>
+
+      <section class="workbench" aria-label="Video analysis workbench">
+        <div class="panel input-panel">
+          <div class="panel-heading"><h2><span class="section-number">01</span>Input</h2><span class="muted">One video. Any question.</span></div>
+          <div class="panel-body">
+            <div class="field-heading"><label for="video-file">Video source</label><button id="sample-button" class="text-button">Use sample clip <span aria-hidden="true">↗</span></button></div>
+            <input type="file" id="video-file" accept=".mp4,.mov,.webm,video/mp4,video/quicktime,video/webm" hidden>
+            <button class="dropzone" id="dropzone" aria-label="Choose a video or drop it here"><span class="upload-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="8" width="17" height="17" rx="4"/><path d="m22 14 6-4v13l-6-4M10 3v9M6 7h8"/></svg></span><strong>Drop a video here</strong><span>or <em>browse files</em> from your computer</span><small>MP4, MOV, WEBM · Up to 500 MiB · 5 minutes</small></button>
+            <div id="video-selected" hidden>
+              <div class="video-frame"><video id="video-preview" controls preload="metadata" playsinline></video><div class="video-tag">LOCAL PREVIEW</div></div>
+              <div class="file-row"><span class="file-icon">↳</span><div><strong id="file-name"></strong><small id="file-meta"></small></div><button class="icon-button" id="remove-file" aria-label="Remove selected video" title="Remove selected video">×</button></div>
+              <p id="preview-warning" class="helper" hidden></p>
+            </div>
+            <div class="question-heading"><label for="prompt">What would you like to know?</label><span id="prompt-count">0 / 4,000</span></div>
+            <textarea id="prompt" maxlength="4000" rows="4" placeholder="Describe the main events in this video…">Summarize the visual sequence in this video in at most three short sentences. Be concise.</textarea>
+            <div class="prompt-presets" aria-label="Example questions"><button data-prompt="Summarize the visual sequence in this video in at most three short sentences. Be concise.">Summarize</button><button data-prompt="Describe the main actions and how they change over the course of this video. Be concise.">Describe actions</button><button data-prompt="What objects and animals are visible in this video? Only mention what you can clearly see.">Identify objects</button></div>
+            <div class="settings-row"><div><label for="max-tokens">Response length</label><p>Maximum output tokens</p></div><select id="max-tokens"><option value="128">Short · 128</option><option value="256" selected>Balanced · 256</option><option value="512">Detailed · 512</option><option value="1024">Extended · 1,024</option><option value="2048">Maximum · 2,048</option></select></div>
+            <button class="run-button" id="run-button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7z"/></svg><span id="run-label">Analyze video</span><span class="run-arrow" aria-hidden="true">↗</span></button>
+            <p class="run-hint" id="run-hint">Select a video to get started. Nothing is uploaded yet.</p>
+          </div>
+        </div>
+
+        <div class="panel output-panel">
+          <div class="panel-heading"><h2><span class="section-number">02</span>Output</h2><span class="output-status" id="output-status">AWAITING INPUT</span></div>
+          <div class="output-tabs" role="tablist" aria-label="Result format"><button id="answer-tab" role="tab" aria-selected="true" aria-controls="answer-view">Response</button><button id="json-tab" role="tab" aria-selected="false" aria-controls="json-view">JSON</button><div class="output-actions"><button id="copy-result" class="icon-button" disabled aria-label="Copy result" title="Copy result"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V3H3v13h5"/></svg></button><button id="download-result" class="icon-button" disabled aria-label="Download result JSON" title="Download result JSON"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5"/></svg></button></div></div>
+          <div class="empty-output" id="empty-output"><div class="viewfinder"><i></i><i></i><i></i><i></i><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 20s5-10 14-10 14 10 14 10-5 10-14 10S6 20 6 20Z"/><circle cx="20" cy="20" r="4"/></svg></div><h3>A new perspective, frame by frame.</h3><p>Your model’s response will appear here.<br>Start with a clip and a little curiosity.</p><button id="empty-saved-test" class="text-button">Explore the last completed test <span aria-hidden="true">→</span></button></div>
+          <div class="processing-view" id="processing-view" role="status" hidden><span class="spinner"></span><h3 id="processing-title">Preparing your video</h3><p id="processing-detail">Your request will appear here as it progresses.</p><div class="progress-track"><div id="upload-progress"></div></div><button id="cancel-job" class="secondary-button" hidden>Request cancellation</button><p class="helper">Cold starts and queue time are separate from model execution.</p></div>
+          <div id="answer-view" role="tabpanel" aria-labelledby="answer-tab" hidden><div class="answer-label"><span class="small-dot"></span><span id="answer-origin">MODEL RESPONSE</span></div><p id="answer-text"></p><div class="metric-grid"><div><span>Video length</span><strong id="metric-video">—</strong></div><div><span>Worker time</span><strong id="metric-worker">—</strong></div><div><span>Generation</span><strong id="metric-generation">—</strong></div><div><span>Output tokens</span><strong id="metric-tokens">—</strong></div></div><p class="metric-note">Worker time excludes upload, queueing, and cold start. Model answers can be wrong.</p><details class="result-details"><summary>Request details <span>+</span></summary><dl><dt>Job ID</dt><dd id="detail-job"></dd><dt>Model</dt><dd id="detail-model"></dd><dt>Revision</dt><dd id="detail-revision"></dd></dl></details></div>
+          <div id="json-view" role="tabpanel" aria-labelledby="json-tab" hidden><pre id="json-output"></pre></div>
+          <div class="output-footer"><span class="small-dot"></span><span>Visual understanding · No audio transcription</span></div>
+        </div>
+      </section>
+
+      <section class="history-section" id="history-section"><div class="section-heading"><h2>Recent tests</h2><span>Saved in this browser · no API keys stored</span></div><div id="history-list" class="history-list"><button class="history-item" id="pilot-history"><span class="history-icon">↗</span><div><strong>Penguins & places</strong><small>Previous live pilot · 10-second sample</small></div><span class="history-badge">Saved result</span><span class="history-arrow">→</span></button></div></section>
+      <footer class="page-footer"><span><span class="small-dot"></span>Local interface. Private API. Your credentials stay server-side.</span><span>Built for testing, not production.</span></footer>
+    </main>
+  </div>
+
+  <dialog id="guide-dialog"><div class="dialog-heading"><h2>Your Tayra Labs workspace</h2><button id="guide-close" class="icon-button" aria-label="Close quick guide">×</button></div><p>This page connects to your existing IAM-private Google Cloud API through a local, authenticated bridge.</p><ol><li>Choose a video or load the public sample clip.</li><li>Write a question and choose a response length.</li><li>When analysis is enabled, select <strong>Analyze video</strong>. This uploads the video and submits a real, potentially billable job.</li><li>Read, copy, or download the result. Refreshing the page lets you reopen saved job IDs.</li></ol><div class="guide-note"><strong>GPU currently paused?</strong><p>You can preview videos and read earlier results. This interface cannot resume the GPU or change your cloud budget. API connectivity does not mean a GPU is warm.</p></div><p class="helper">Sources have a normal 24-hour retention window and results 30 days, with asynchronous cleanup. Recent job IDs and filenames are stored in this browser; credentials are not. The sample is public Allen AI demo footage. Tayra Labs is the company; model product names are still undecided. The current underlying model is Allen AI’s Molmo2-8B.</p></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

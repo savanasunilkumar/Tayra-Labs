@@ -1,0 +1,9 @@
+runpod==1.12.0
+transformers==4.57.1
+molmo-utils[torchcodec]==0.0.1
+accelerate>=1.10,<2
+decord2>=0.0.1,<1
+einops>=0.8,<1
+Pillow>=11,<13
+requests>=2.32,<3
+

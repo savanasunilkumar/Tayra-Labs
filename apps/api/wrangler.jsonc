@@ -1,0 +1,52 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "inqox-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-20",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "vars": {
+    "ENVIRONMENT": "development",
+    "ALLOWED_ORIGIN": "http://localhost:3000",
+    "RUNPOD_ENDPOINT_ID": "replace-with-runpod-endpoint-id",
+    "R2_BUCKET_NAME": "inqox-media",
+    "MODEL_ID": "allenai/Molmo2-4B",
+    "MODEL_REVISION": "042abfa7a38879a376cec03d949eff0aefaa0600",
+    "UPLOAD_URL_TTL_SECONDS": "900",
+    "SOURCE_URL_TTL_SECONDS": "10800",
+    "RESULT_URL_TTL_SECONDS": "900",
+    "MAX_UPLOAD_BYTES": "524288000",
+    "SOURCE_RETENTION_HOURS": "24",
+    "RESULT_RETENTION_DAYS": "30",
+    "SUBMISSION_RECOVERY_SECONDS": "7500"
+  },
+  "secrets": {
+    "required": [
+      "INQOX_API_KEY",
+      "RUNPOD_API_KEY",
+      "R2_ACCOUNT_ID",
+      "R2_ACCESS_KEY_ID",
+      "R2_SECRET_ACCESS_KEY"
+    ]
+  },
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "inqox-media"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "inqox-db",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  }
+}

@@ -1,0 +1,6 @@
+INQOX_API_KEY="replace-with-a-long-random-development-key"
+RUNPOD_API_KEY="replace-with-a-restricted-runpod-key"
+R2_ACCOUNT_ID="replace-with-your-cloudflare-account-id"
+R2_ACCESS_KEY_ID="replace-with-a-bucket-scoped-r2-access-key"
+R2_SECRET_ACCESS_KEY="replace-with-a-bucket-scoped-r2-secret"
+

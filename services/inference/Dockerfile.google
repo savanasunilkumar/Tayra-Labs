@@ -1,0 +1,11 @@
+FROM pytorch/pytorch:2.9.1-cuda12.8-cudnn9-runtime@sha256:7b324d212a4450795b49edba9949b7cdc72429148a64e974334bfe5774d51385
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PORT=8080 HF_HOME=/tmp/huggingface-cache
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg ca-certificates && rm -rf /var/lib/apt/lists/*
+COPY services/cloud/requirements.txt /app/cloud-requirements.txt
+COPY services/inference/requirements-google.txt /app/inference-requirements.txt
+RUN pip install --no-cache-dir -r cloud-requirements.txt -r inference-requirements.txt
+COPY services/cloud /app/services/cloud
+COPY services/inference/src /app/services/inference/src
+RUN python -c "from services.cloud.worker import app; from services.inference.src.model import MolmoRuntime; import torchvision, decord; print('Worker imports verified')"
+CMD ["sh", "-c", "exec uvicorn services.cloud.worker:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1 --no-access-log"]

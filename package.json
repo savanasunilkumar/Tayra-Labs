@@ -1,0 +1,30 @@
+{
+  "name": "video-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tayra Labs video intelligence platform",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "workerd"],
+    "supportedArchitectures": {
+      "os": ["current"],
+      "cpu": ["current"],
+      "libc": ["current"]
+    }
+  },
+  "scripts": {
+    "playground": ".venv/bin/python scripts/playground.py",
+    "dev": "pnpm --filter @tayra/web dev",
+    "dev:api": ".venv/bin/python scripts/account_api.py",
+    "build:web": "pnpm --filter @tayra/web build",
+    "check:web": "pnpm --filter @tayra/web check",
+    "test": ".venv/bin/pytest -q",
+    "check": ".venv/bin/ruff check services/cloud services/inference/src/model.py scripts && .venv/bin/pytest -q",
+    "legacy:dev": "pnpm --filter @inqox/api dev",
+    "legacy:check": "pnpm --filter @inqox/api types && pnpm --filter @inqox/api typecheck && pnpm --filter @inqox/api test"
+  }
+}

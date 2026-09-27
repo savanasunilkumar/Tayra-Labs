@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inqox GPU hosting decision — Google Cloud vs RunPod</title>
+  <style>
+    :root { color-scheme: light; --ink:#17212c; --muted:#536274; --line:#dbe2e9; --paper:#f5f7fa; --card:#fff; --accent:#145b74; --soft:#e5f3f7; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { max-width:1000px; margin:0 auto; padding:36px 22px 64px; }
+    h1 { font-size:clamp(30px,4.5vw,48px); line-height:1.12; letter-spacing:-.035em; margin:8px 0 12px; }
+    h2 { font-size:23px; letter-spacing:-.02em; margin:0 0 14px; }
+    h3 { font-size:17px; margin:0 0 8px; }
+    p { margin:8px 0; }
+    .eyebrow { color:var(--accent); font-size:12px; font-weight:750; letter-spacing:.12em; text-transform:uppercase; }
+    .lede { color:var(--muted); font-size:19px; max-width:780px; }
+    .meta { color:var(--muted); font-size:13px; margin-top:14px; }
+    section { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:24px; margin-top:18px; box-shadow:0 4px 22px rgba(20,40,60,.035); }
+    .callout { background:var(--soft); border-left:4px solid var(--accent); border-radius:8px; padding:16px 18px; margin-top:16px; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:16px 0 4px; }
+    .metric { border:1px solid var(--line); border-radius:12px; padding:14px; }
+    .metric strong { display:block; font-size:24px; letter-spacing:-.03em; }
+    .metric span { color:var(--muted); font-size:13px; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; margin:8px 0; }
+    th,td { text-align:left; vertical-align:top; padding:11px 12px; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); font-size:13px; font-weight:700; }
+    .small { color:var(--muted); font-size:13px; }
+    ul,ol { padding-left:22px; margin:9px 0; }
+    li { margin:7px 0; }
+    a { color:#096389; text-decoration-thickness:1px; text-underline-offset:2px; }
+    code { background:#edf1f5; padding:1px 5px; border-radius:4px; }
+    @media (max-width:700px) { main { padding:24px 14px 42px; } section { padding:18px; } .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Inqox infrastructure decision</div>
+    <h1>Google Cloud or RunPod for Molmo2?</h1>
+    <p class="lede">Use the available Google Cloud startup credits for the first pilot if they cover Cloud Run GPU usage. Keep RunPod as a cost benchmark for the business after the credits expire.</p>
+    <p class="meta">26 September 2026 · USD list prices · One L4 GPU · No deployment or account inspection performed</p>
+  </header>
+
+  <section id="overview">
+    <h2>Overview</h2>
+    <p>Google Cloud is technically capable of hosting the Inqox inference worker. Cloud Run supports L4 GPUs, can scale to zero, and can serve requests from an asynchronous Cloud Tasks queue. RunPod was selected for the starter because its serverless queue matches the existing worker directly and its listed L4 rate is lower.</p>
+    <div class="grid">
+      <div class="metric"><strong>$0.69/hour</strong><span>RunPod Serverless, listed 24 GB L4 class</span></div>
+      <div class="metric"><strong>≈$1.05/hour</strong><span>Google Cloud Run L4, 4 vCPU, 16 GiB RAM, non-zonal redundancy</span></div>
+      <div class="metric"><strong>≈2,770 hours</strong><span>Illustrative L4 instance time covered by $2,900 eligible credit at the minimum configuration, excluding other costs</span></div>
+    </div>
+    <div class="callout"><strong>Decision:</strong> build and benchmark a Google Cloud Run GPU pilot with minimum instances zero and maximum instances capped. Confirm credit scope and expiry first. Keep the API, D1 metadata, and R2 objects on Cloudflare during the test.</div>
+  </section>
+
+  <section id="competitors">
+    <h2>Provider comparison</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Area</th><th>Google Cloud Run GPU</th><th>RunPod Serverless</th><th>Inqox readout</th></tr></thead>
+      <tbody>
+        <tr><td>GPU availability</td><td>L4 24 GB or RTX PRO 6000 96 GB; region and quota dependent.</td><td>24 GB L4 class and larger GPU tiers.</td><td>Both are plausible; test Molmo2 video memory on L4.</td></tr>
+        <tr><td>Low-traffic cost</td><td>Scales to zero; GPU uses instance-based billing while an instance lives.</td><td>Queue workers can scale to zero.</td><td>Both avoid a permanent idle GPU if configured correctly.</td></tr>
+        <tr><td>Listed L4 running cost</td><td>≈$1.05/hour with minimum CPU/RAM and non-zonal redundancy; ≈$1.42/hour with zonal redundancy on.</td><td>$0.69/hour for the 24 GB L4 class.</td><td>RunPod has the lower listed ongoing compute price. Actual cost per processed video hour depends on throughput and cold starts.</td></tr>
+        <tr><td>Queue integration</td><td>Cloud Tasks can push to a private Cloud Run service for jobs up to 30 minutes; Cloud Run GPU Jobs are also supported.</td><td>Queue, status, cancel, and callback APIs already used in the scaffold.</td><td>Moving to Google requires adapting the worker entrypoint and job submission/status logic.</td></tr>
+        <tr><td>Credit fit</td><td>Google startup credits generally apply to eligible Google Cloud services; inspect the credit’s scope and expiry in Billing.</td><td>Google credit does not pay RunPod charges.</td><td>Google likely wins pilot cash spend if the credit covers Cloud Run GPU.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">Google estimate: (L4 $0.0001867 + 4 vCPU × $0.000018 + 16 GiB × $0.000002) × 3,600 = $1.04652 per running hour. It is a floor: more system memory, storage, networking, build time, and idle lifecycle time add cost. The $2,900 illustration assumes full eligibility and no other credit use.</p>
+  </section>
+
+  <section id="guidance">
+    <h2>What changes in our architecture</h2>
+    <p>Customer upload → Cloudflare API → private R2 stays the same. The Cloudflare API would enqueue work in Google Cloud Tasks; an authenticated Cloud Run GPU service would read the signed R2 source URL, run Molmo2, write the result to R2, and notify the API. D1 remains the job record. Cloud Run GPU Jobs are an alternative for longer isolated jobs, but loading a roughly 19 GB model for every individual job may consume credit quickly; benchmark that path before choosing it.</p>
+    <ol>
+      <li>Verify the promotional credit’s <strong>Scope</strong> and <strong>End date</strong> on Google Cloud Billing → Credits. A non-billable $300 free trial restricts GPU access; a paid billing account can use remaining eligible credit.</li>
+      <li>Start with one Cloud Run L4, 4 vCPU, at least 16 GiB system RAM, minimum instances zero, maximum instances one, concurrency one, and non-zonal redundancy. Raise RAM or GPU size if Molmo2 video inference needs it.</li>
+      <li>Store the pinned model in Cloud Storage for reliable starts; Google recommends this for large models. The current RunPod container and API integration need an adapter for Cloud Run and Cloud Tasks.</li>
+      <li>Measure GPU seconds, cold start, memory peak, failures, and dollars per processed video hour on both providers before committing to a long-term host.</li>
+    </ol>
+    <div class="callout"><strong>45% margin check:</strong> the current architecture notes a proposed $1.49 per processed video hour, allowing about $0.82 total cost per video hour. At list price, the minimum Google configuration could use at most about 47 GPU minutes per processed video hour before other costs; RunPod about 71 minutes. Promotional credits lower pilot cash spend, but do not establish a sustainable post-credit margin. A separate older pricing brief proposes different rates, so the launch rate card still needs reconciliation.</div>
+    <h3 style="margin-top:22px">What not to overclaim</h3>
+    <ul>
+      <li>The exact $2,900 credit eligibility and expiry have not been verified from the billing account.</li>
+      <li>An L4’s 24 GB VRAM has not been proven sufficient for Molmo2 video inference at our five-minute limit.</li>
+      <li>Hourly GPU price is not cost per processed video hour; model speed and cold starts determine that conversion.</li>
+    </ul>
+  </section>
+
+  <section id="sources">
+    <h2>Sources and evidence limits</h2>
+    <ul>
+      <li><a href="https://docs.cloud.google.com/run/docs/configuring/services/gpu">Google Cloud Run GPU services</a> — L4 and RTX PRO 6000 VRAM, minimum CPU/RAM, scaling, billing, and regions.</li>
+      <li><a href="https://cloud.google.com/run/pricing">Google Cloud Run pricing</a> — instance CPU, RAM, and L4 per-second rates.</li>
+      <li><a href="https://www.runpod.io/pricing">RunPod pricing</a> — current listed serverless 24 GB GPU class.</li>
+      <li><a href="https://docs.cloud.google.com/run/docs/triggering/using-tasks">Google Cloud Tasks with Cloud Run</a> and <a href="https://docs.cloud.google.com/tasks/docs/creating-http-target-tasks">HTTP task timeout</a> — queue design and 30-minute deadline.</li>
+      <li><a href="https://docs.cloud.google.com/run/docs/configuring/jobs/gpu">Cloud Run GPU Jobs</a> — supported batch alternative.</li>
+      <li><a href="https://docs.cloud.google.com/run/docs/configuring/services/gpu-best-practices">Cloud Run GPU model-loading guidance</a> — Cloud Storage recommendation for large model weights.</li>
+      <li><a href="https://huggingface.co/allenai/Molmo2-4B/tree/main">Molmo2-4B model files</a> — approximately 19.4 GB repository size.</li>
+      <li><a href="https://cloud.google.com/startup/faq">Google for Startups FAQ</a>, <a href="https://docs.cloud.google.com/billing/docs/how-to/resolve-issues">Billing Credits page guidance</a>, and <a href="https://docs.cloud.google.com/free/docs/free-cloud-features">Free Trial limits</a> — credit eligibility context and restrictions.</li>
+    </ul>
+    <p class="small">Sources used: user-provided credit type, the local Inqox architecture and pricing notes, and official public provider documentation. No billing account, GPU benchmark, customer data, or internal field sources were available or needed for this provider comparison.</p>
+  </section>
+</main>
+</body>
+</html>

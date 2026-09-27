@@ -1,0 +1,14 @@
+project_id         = "replace-with-dedicated-project-id"
+product_name       = "Video API"
+resource_prefix    = "video-api"
+region             = "us-central1"
+allowed_origin     = "http://localhost:3000"
+create_staging_job = false
+deploy_services    = false
+deploy_api_only    = false
+gpu_paused         = false
+enable_hf_auth     = false
+public_api_enabled = false
+# Set digest references after building, then stage the model before deploying services.
+# api_image    = "us-central1-docker.pkg.dev/PROJECT/video-api/api@sha256:DIGEST"
+# worker_image = "us-central1-docker.pkg.dev/PROJECT/video-api/worker@sha256:DIGEST"

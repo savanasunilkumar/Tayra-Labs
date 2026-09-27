@@ -1,0 +1,13 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ['build', '-f', 'services/cloud/Dockerfile', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_RESOURCE_PREFIX}/api:${_TAG}', '.']
+images:
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_RESOURCE_PREFIX}/api:${_TAG}'
+serviceAccount: 'projects/$PROJECT_ID/serviceAccounts/${_RESOURCE_PREFIX}-build@$PROJECT_ID.iam.gserviceaccount.com'
+options:
+  logging: CLOUD_LOGGING_ONLY
+timeout: 600s
+substitutions:
+  _REGION: us-central1
+  _RESOURCE_PREFIX: video-api
+  _TAG: pilot-v2

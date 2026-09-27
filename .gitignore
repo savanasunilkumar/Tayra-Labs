@@ -1,0 +1,40 @@
+node_modules/
+.pnpm-store/
+
+# Cloudflare local state and generated artifacts
+.wrangler/
+worker-configuration.d.ts
+
+# Local secrets
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.ruff_cache/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+terraform.tfvars
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Build and test output
+dist/
+.next/
+*.tsbuildinfo
+coverage/
+*.log
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/

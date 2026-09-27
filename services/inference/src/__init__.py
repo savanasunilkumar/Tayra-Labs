@@ -1,0 +1,2 @@
+"""Inqox RunPod inference worker."""
+

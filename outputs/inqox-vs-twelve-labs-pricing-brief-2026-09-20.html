@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inqox vs Twelve Labs — Pricing Brief</title>
+  <style>
+    :root {
+      --ink: #16202a;
+      --muted: #5f6b76;
+      --line: #dbe2e8;
+      --paper: #f5f7f9;
+      --card: #ffffff;
+      --accent: #2356d8;
+      --accent-soft: #e9efff;
+      --good: #147a52;
+      --good-soft: #e4f5ed;
+      --warn: #a6560b;
+      --warn-soft: #fff0df;
+      --bad: #a43434;
+      --bad-soft: #fdeaea;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main { width: min(1120px, calc(100% - 32px)); margin: 32px auto 56px; }
+    header {
+      padding: 34px;
+      color: white;
+      background: linear-gradient(135deg, #14213d, #2356d8);
+      border-radius: 18px;
+      box-shadow: 0 12px 28px rgba(20, 33, 61, .16);
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(30px, 5vw, 50px); letter-spacing: -.035em; }
+    h2 { margin: 0 0 14px; font-size: 24px; letter-spacing: -.02em; }
+    h3 { margin: 0 0 8px; font-size: 17px; }
+    p { margin: 8px 0; }
+    .kicker { margin: 0 0 8px; opacity: .78; text-transform: uppercase; letter-spacing: .12em; font-size: 12px; }
+    .lede { max-width: 820px; font-size: 18px; opacity: .94; }
+    .meta { margin-top: 18px; font-size: 13px; opacity: .72; }
+    section {
+      margin-top: 22px;
+      padding: 26px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .card { padding: 18px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .metric { font-size: 30px; line-height: 1.1; font-weight: 750; letter-spacing: -.03em; }
+    .label { margin-top: 6px; color: var(--muted); font-size: 13px; }
+    .badge { display: inline-block; padding: 4px 9px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+    .bad { color: var(--bad); background: var(--bad-soft); }
+    .good { color: var(--good); background: var(--good-soft); }
+    .warn { color: var(--warn); background: var(--warn-soft); }
+    .accent { color: var(--accent); background: var(--accent-soft); }
+    table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    td.num, th.num { text-align: right; white-space: nowrap; }
+    tr:last-child td { border-bottom: 0; }
+    .callout { padding: 16px 18px; border-left: 4px solid var(--accent); background: var(--accent-soft); border-radius: 8px; }
+    .recommend { border-left-color: var(--good); background: var(--good-soft); }
+    ul { margin: 10px 0 0; padding-left: 20px; }
+    li { margin: 7px 0; }
+    a { color: var(--accent); }
+    .fine { color: var(--muted); font-size: 13px; }
+    .sources li { margin: 10px 0; }
+    @media (max-width: 760px) {
+      .grid { grid-template-columns: 1fr; }
+      header, section { padding: 20px; }
+      table { display: block; overflow-x: auto; }
+    }
+    @media print {
+      body { background: white; }
+      main { width: 100%; margin: 0; }
+      header, section { break-inside: avoid; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="kicker">Competitive pricing brief</p>
+    <h1>Inqox vs Twelve Labs</h1>
+    <p class="lede">The proposed Inqox Search prices can be competitive. The proposed standard Analyze price cannot credibly be called cheaper: it is about 2.1–2.7× Twelve Labs before output tokens.</p>
+    <p class="meta">Verified against public pricing on September 20, 2026 · USD · Developer/pay-as-you-go rates</p>
+  </header>
+
+  <section id="overview">
+    <h2>Overview</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="metric">2.1–2.7×</div>
+        <div class="label">Inqox proposed standard Analyze price versus Twelve Labs</div>
+        <p><span class="badge bad">Pricing pressure</span></p>
+      </div>
+      <div class="card">
+        <div class="metric">−5.7% to +42.6%</div>
+        <div class="label">Inqox first-month Search bill versus Twelve Labs</div>
+        <p><span class="badge warn">Depends on tier</span></p>
+      </div>
+      <div class="card">
+        <div class="metric">$0.039/min</div>
+        <div class="label">Recommended launch price for grounded standard analysis</div>
+        <p><span class="badge good">Better starting point</span></p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:16px">
+      <strong>Bottom line:</strong> do not position Inqox as a cheaper Twelve Labs clone. Position it as a configurable, grounded video-understanding API, with points, timestamps, tracking, explicit frame-density controls, and eventually private deployment.
+    </div>
+  </section>
+
+  <section id="competitors">
+    <h2>Competitors and rate card</h2>
+    <table>
+      <thead>
+        <tr><th>Meter</th><th class="num">Proposed Inqox</th><th class="num">Twelve Labs</th><th>Readout</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Standard Analyze input</td><td class="num">$0.06–$0.08/min</td><td class="num">$0.02917/min</td><td><span class="badge bad">106%–174% more</span></td></tr>
+        <tr><td>Dense / tracking</td><td class="num">$0.15–$0.25/min</td><td class="num">No exact equivalent</td><td>Premium is defensible only with measured grounding/tracking value.</td></tr>
+        <tr><td>Output text</td><td class="num">$8–$12/M tokens</td><td class="num">$7.50/M tokens</td><td><span class="badge warn">7%–60% more</span></td></tr>
+        <tr><td>Search indexing</td><td class="num">$0.04–$0.06/min</td><td class="num">$0.04167/min</td><td><span class="badge good">4% cheaper</span> at low end; 44% more at high end.</td></tr>
+        <tr><td>Index infrastructure</td><td class="num">$0.05–$0.10/hour/month</td><td class="num">$0.09/hour/month</td><td>44% cheaper to 11% more.</td></tr>
+        <tr><td>Search queries</td><td class="num">$3–$5/1,000</td><td class="num">$4/1,000</td><td>25% cheaper to 25% more.</td></tr>
+      </tbody>
+    </table>
+    <p class="fine">Image pricing is not directly comparable: the proposed Inqox image rate covers understanding/captioning, while Twelve Labs' public image rate is for embeddings.</p>
+  </section>
+
+  <section>
+    <h2>Analyze-only customer bill</h2>
+    <p>Video input only; output-token charges excluded for both products.</p>
+    <table>
+      <thead><tr><th>Monthly analyzed video</th><th class="num">Twelve Labs</th><th class="num">Inqox proposed standard</th><th class="num">Difference</th></tr></thead>
+      <tbody>
+        <tr><td>100 hours</td><td class="num">$175</td><td class="num">$360–$480</td><td class="num">+$185 to +$305</td></tr>
+        <tr><td>1,000 hours</td><td class="num">$1,750</td><td class="num">$3,600–$4,800</td><td class="num">+$1,850 to +$3,050</td></tr>
+        <tr><td>10,000 hours</td><td class="num">$17,500</td><td class="num">$36,000–$48,000</td><td class="num">+$18,500 to +$30,500</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Search customer bill</h2>
+    <p>One-time indexing + one full month of index infrastructure + 10 searches per video hour.</p>
+    <table>
+      <thead><tr><th>Indexed library</th><th class="num">Twelve Labs</th><th class="num">Inqox proposed range</th><th>Readout</th></tr></thead>
+      <tbody>
+        <tr><td>100 hours</td><td class="num">$263</td><td class="num">$248–$375</td><td>6% cheaper to 43% more</td></tr>
+        <tr><td>1,000 hours</td><td class="num">$2,630</td><td class="num">$2,480–$3,750</td><td>6% cheaper to 43% more</td></tr>
+        <tr><td>10,000 hours</td><td class="num">$26,300</td><td class="num">$24,800–$37,500</td><td>6% cheaper to 43% more</td></tr>
+      </tbody>
+    </table>
+    <p class="fine">In later months with no new indexing and the same query rate, Twelve Labs is $0.13 per stored video hour/month; Inqox's proposed range is $0.08–$0.15.</p>
+  </section>
+
+  <section id="guidance">
+    <h2>Guidance</h2>
+    <div class="callout recommend">
+      <strong>Recommended launch card:</strong> Standard Analyze $0.039/min; grounded/dense $0.10–$0.15/min; Search indexing $0.039/min; stored index $0.06/video-hour/month; Search $3/1,000 queries; output text $7.50/M tokens or a clearly stated included allowance.
+    </div>
+    <table>
+      <thead><tr><th>Area</th><th>Inqox</th><th>Twelve Labs</th><th>Readout</th></tr></thead>
+      <tbody>
+        <tr><td>Grounding and control</td><td>Potential advantage in explicit pointing, tracking, timestamps, and selectable frame density.</td><td>Broad managed capabilities, but customers buy the packaged platform.</td><td><span class="badge accent">Inqox differentiation</span></td></tr>
+        <tr><td>Audio and speech</td><td>Requires a separate transcription/audio pipeline in the current design.</td><td>Publicly claims integrated visual, audio, speech, and sound understanding.</td><td><span class="badge bad">Twelve Labs lead</span></td></tr>
+        <tr><td>Search maturity</td><td>Planned embedding and vector-index layer; not yet validated.</td><td>Managed indexing, storage, querying, SDKs, and public rate limits.</td><td><span class="badge bad">Twelve Labs lead</span></td></tr>
+        <tr><td>Customization</td><td>Control over model, frame sampling, prompts, deployment, and potentially private environments.</td><td>Managed service with enterprise custom options through sales.</td><td><span class="badge accent">Potential Inqox lead</span></td></tr>
+        <tr><td>Reliability and proof</td><td>Needs latency, quality, uptime, and commercial-license validation.</td><td>Mature platform and enterprise track record.</td><td><span class="badge bad">Twelve Labs lead</span></td></tr>
+      </tbody>
+    </table>
+    <h3 style="margin-top:20px">Landmines / do not say</h3>
+    <ul>
+      <li>Do not call 1-FPS Molmo processing equivalent to Twelve Labs without side-by-side quality benchmarks.</li>
+      <li>Do not claim Inqox is cheaper while advertising $0.06–$0.08/min as the base Analyze tier.</li>
+      <li>Do not sell Search until the embedding quality, indexing latency, filters, and timestamp retrieval are tested.</li>
+      <li>Do not claim enterprise reliability, audio parity, private deployment, or an SLA before those capabilities exist.</li>
+      <li>Resolve Molmo 2's disclosed training-data licensing caveat before commercial launch.</li>
+    </ul>
+  </section>
+
+  <section id="sources">
+    <h2>Sources and evidence posture</h2>
+    <ul class="sources">
+      <li><a href="https://www.twelvelabs.io/pricing">Twelve Labs pricing</a> — current Developer Search, Analyze, Embed, output-token, free-tier, and capacity terms.</li>
+      <li><a href="https://www.twelvelabs.io/pricing-calculator">Twelve Labs pricing calculator</a> — token-to-minute and image assumptions for Embed estimates.</li>
+      <li><a href="https://huggingface.co/allenai/Molmo2-4B">Molmo2-4B model card</a> — capabilities, benchmark table, model size, and license/use warning.</li>
+      <li><a href="https://github.com/allenai/molmo2">Official Molmo 2 repository</a> — video inference, frame/context configuration, and serving support.</li>
+    </ul>
+    <p class="fine"><strong>Evidence posture:</strong> Twelve Labs prices are verified public facts. Inqox prices are proposed, not launched. Inqox capability and margin statements are hypotheses until the actual Molmo 2 pipeline is benchmarked. No internal CRM, customer, transcript, or field evidence was used or required for this product-level comparison.</p>
+  </section>
+</main>
+</body>
+</html>
